@@ -12,7 +12,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-
+/*
+required attributes of 
+User table 
+userid - primary key (autoIncrement)
+fname
+lname
+email (unique)
+pno
+passwd
+role enum(user,customer,admin)
+status - enum(active/inactive)
+created time
+updated time
+*/
 @Entity
 @Table(name = "users")
 @Data
