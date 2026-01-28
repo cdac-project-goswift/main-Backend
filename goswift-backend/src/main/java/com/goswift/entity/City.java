@@ -13,6 +13,15 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cityId;
 
+    // Feature: Geo-Location for Map Integration
+    // Stores coordinates to show cities on a Google Map integration.
+    /*
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
+    */
     @Column(name = "city_name", nullable = false)
     private String cityName;
 
