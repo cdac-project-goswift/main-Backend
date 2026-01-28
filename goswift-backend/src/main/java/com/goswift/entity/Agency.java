@@ -21,6 +21,8 @@ public class Agency {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @Column(name = "agency_name", nullable = false)
+    // @Column(name = "agency_name", nullable = false)
+    // private String agencyName;
+    @Column(name="agency_name", nullable=false)
     private String agencyName;
 }

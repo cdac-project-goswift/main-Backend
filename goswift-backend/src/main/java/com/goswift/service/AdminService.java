@@ -25,8 +25,9 @@ public interface AdminService {
 	public SystemStatsDTO getSystemStats();
 	public List<City> getAllCities();
 	public City addCity(City city) ;
-	public void updateUserStatus(Long userId, UserStatus status);
+	// public void updateUserStatus(Long userId, UserStatus status);
+	// public List<UserDTO> getAllUsers();
+	public void updateUserStatus(long userId, UserStatus status);
 	public List<UserDTO> getAllUsers();
-	
 
 }

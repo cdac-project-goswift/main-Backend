@@ -31,6 +31,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                                    @Param("dest") String dest,
                                    @Param("busType") BusType busType);
     
-    // Fixed: Declared missing method
     List<Schedule> findByBus_Agency(Agency agency);
 }
