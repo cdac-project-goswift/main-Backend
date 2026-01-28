@@ -25,6 +25,15 @@ public class Feedback {
     @Column(nullable = false)
     private int rating;
 
+    /*
+    // Direct reference to User to avoid joining the Booking table during queries.
+    // 3NF (Data Normalization) violation is acceptable here for performance optimization.
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+    */
+
     @Column(length = 500)
     private String comments;
 
