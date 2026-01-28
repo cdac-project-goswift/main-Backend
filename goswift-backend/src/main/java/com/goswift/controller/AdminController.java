@@ -32,10 +32,15 @@ public class AdminController {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Users fetched", adminService.getAllUsers()));
     }
 
-    @PutMapping("/users/{userId}/status")
-    public ResponseEntity<ApiResponse<String>> updateUserStatus(@PathVariable Long userId, @RequestParam UserStatus status) {
-        adminService.updateUserStatus(userId, status);
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "User status updated", null));
+    // @PutMapping("/users/{userId}/status")
+    // public ResponseEntity<ApiResponse<String>> updateUserStatus(@PathVariable Long userId, @RequestParam UserStatus status) {
+    //     adminService.updateUserStatus(userId, status);
+    //     return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "User status updated", null));
+    // }
+    @PutMapping("/users/{userId}/Status")
+    public ResponseEntity<ApiResponse<String>> updateUserStatus(@PathVariable Long userId, @RequestParam UserStatus status){
+        adminService.updateUserStatus(userId,status);
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS","User status updated",null));
     }
 
     // Req 10: Add City
