@@ -4,6 +4,10 @@ import com.goswift.enums.UserRole;
 import com.goswift.enums.UserStatus;
 import lombok.Data;
 
+/*
+used for registration
+*/
+
 @Data
 public class UserDTO {
     private Long userId;
