@@ -27,5 +27,19 @@ public class AgentController {
     private AdminService adminService;
 
     // --- Fleet Management ---
-   
+    @PostMapping("/{userId}/buses")
+    public ResponseEntity<ApiResponse<Bus>> addBus(@PathVariable Long userId, @Valid @RequestBody BusRequest request) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Bus added", agentService.addBus(userId, request)));
+    }
+
+    @GetMapping("/{userId}/buses")
+    public ResponseEntity<ApiResponse<List<Bus>>> getMyBuses(@PathVariable Long userId) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Fleet fetched", agentService.getMyBuses(userId)));
+    }
+
+    // Req 19: Update/Delete Bus
+    @PutMapping("/buses/{busId}")
+    public ResponseEntity<ApiResponse<Bus>> updateBus(@PathVariable Long busId, @RequestBody BusRequest request) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Bus updated", agentService.updateBus(busId, request)));
+    }
 }

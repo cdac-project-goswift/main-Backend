@@ -24,5 +24,30 @@ public class AgentServiceImpl implements AgentService  {
     private final BookingRepository bookingRepository;
     private final ModelMapper mapper;
 
-    
+    @Override
+    public Bus addBus(Long userId, BusRequest request) {
+        Agency agency = getAgencyByUserId(userId);
+        return busRepository.save(Bus.builder()
+                .agency(agency)
+                .registrationNo(request.getRegistrationNo())
+                .busType(BusType.valueOf(request.getBusType()))
+                .capacity(request.getCapacity())
+                .build());
+    }
+    @Override
+    public List<Bus> getMyBuses(Long userId) {
+        Agency agency = getAgencyByUserId(userId);
+        return busRepository.findByAgency(agency);
+    }
+
+    @Override
+    public Bus updateBus(Long busId, BusRequest request) {
+        Bus bus = busRepository.findById(busId)
+            .orElseThrow(() -> new RuntimeException("Bus not found"));
+        
+        bus.setRegistrationNo(request.getRegistrationNo());
+        bus.setBusType(BusType.valueOf(request.getBusType()));
+        bus.setCapacity(request.getCapacity());
+        return busRepository.save(bus);
+    }
 }
