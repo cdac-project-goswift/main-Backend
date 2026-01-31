@@ -1,3 +1,4 @@
+
 package com.goswift.dto;
 
 import com.goswift.enums.UserRole;
