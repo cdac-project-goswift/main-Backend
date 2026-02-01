@@ -36,6 +36,53 @@ public class CustomerServiceImpl implements CustomerService {
         return cityRepository.findAll();
     }
 
+    
+
+    @Override
+    public List<Booking> getUserBookings(Long userId, String type) {
+        User user = userRepository.findById(userId).orElseThrow();
+        List<Booking> allBookings = bookingRepository.findByUser(user);
+        LocalDate today = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+
+        if ("upcoming".equalsIgnoreCase(type)) {
+            return allBookings.stream()
+                    .filter(b -> {
+                        LocalDate journeyDate = b.getJourneyDate();
+                        LocalTime departureTime = b.getSchedule().getDepartureTime();
+                        
+                        // Future dates are upcoming
+                        if (journeyDate.isAfter(today)) {
+                            return true;
+                        }
+                        // Today's bookings are upcoming only if departure time hasn't passed
+                        if (journeyDate.equals(today)) {
+                            return departureTime.isAfter(currentTime);
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+        } else if ("completed".equalsIgnoreCase(type)) {
+            return allBookings.stream()
+                    .filter(b -> {
+                        LocalDate journeyDate = b.getJourneyDate();
+                        LocalTime arrivalTime = b.getSchedule().getArrivalTime();
+                        
+                        // Past dates are completed
+                        if (journeyDate.isBefore(today)) {
+                            return true;
+                        }
+                        // Today's bookings are completed only if arrival time has passed
+                        if (journeyDate.equals(today)) {
+                            return arrivalTime.isBefore(currentTime);
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+        }
+        return allBookings;
+    }
+
     @Override
     public List<SearchResultDTO> searchBuses(String source, String dest, LocalDate date, String busTypeStr, String sortBy) {
         BusType type = (busTypeStr != null && !busTypeStr.isEmpty()) ? BusType.valueOf(busTypeStr) : null;
@@ -115,52 +162,20 @@ public class CustomerServiceImpl implements CustomerService {
         ticketRepository.saveAll(tickets);
         return bookingRepository.findById(savedBooking.getBookingId()).orElseThrow();
     }
-
-    @Override
-    public List<Booking> getUserBookings(Long userId, String type) {
-        User user = userRepository.findById(userId).orElseThrow();
-        List<Booking> allBookings = bookingRepository.findByUser(user);
-        LocalDate today = LocalDate.now();
-        LocalTime currentTime = LocalTime.now();
-
-        if ("upcoming".equalsIgnoreCase(type)) {
-            return allBookings.stream()
-                    .filter(b -> {
-                        LocalDate journeyDate = b.getJourneyDate();
-                        LocalTime departureTime = b.getSchedule().getDepartureTime();
-                        
-                        // Future dates are upcoming
-                        if (journeyDate.isAfter(today)) {
-                            return true;
-                        }
-                        // Today's bookings are upcoming only if departure time hasn't passed
-                        if (journeyDate.equals(today)) {
-                            return departureTime.isAfter(currentTime);
-                        }
-                        return false;
-                    })
-                    .collect(Collectors.toList());
-        } else if ("completed".equalsIgnoreCase(type)) {
-            return allBookings.stream()
-                    .filter(b -> {
-                        LocalDate journeyDate = b.getJourneyDate();
-                        LocalTime arrivalTime = b.getSchedule().getArrivalTime();
-                        
-                        // Past dates are completed
-                        if (journeyDate.isBefore(today)) {
-                            return true;
-                        }
-                        // Today's bookings are completed only if arrival time has passed
-                        if (journeyDate.equals(today)) {
-                            return arrivalTime.isBefore(currentTime);
-                        }
-                        return false;
-                    })
-                    .collect(Collectors.toList());
-        }
-        return allBookings;
+    
+     @Override
+    public List<String> getBookedSeats(Long scheduleId, LocalDate date) {
+        return ticketRepository.findOccupiedSeats(scheduleId, date);
     }
 
+    @Override
+    public boolean hasFeedback(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+        return feedbackRepository.existsByBooking(booking);
+    }
+
+
+    
     @Override
     public Feedback addFeedback(FeedbackRequest request) {
         Booking booking = bookingRepository.findById(request.getBookingId()).orElseThrow();
@@ -188,14 +203,5 @@ public class CustomerServiceImpl implements CustomerService {
                 .build());
     }
 
-    @Override
-    public List<String> getBookedSeats(Long scheduleId, LocalDate date) {
-        return ticketRepository.findOccupiedSeats(scheduleId, date);
-    }
-
-    @Override
-    public boolean hasFeedback(Long bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow();
-        return feedbackRepository.existsByBooking(booking);
-    }
+   
 }
