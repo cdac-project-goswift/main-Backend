@@ -14,7 +14,6 @@ import com.goswift.entity.SystemConfig;
 import com.goswift.enums.UserStatus;
 
 public interface AdminService {
-	
 	public SystemConfig updateConfig(SystemConfigRequest req);
 	public SystemConfig getConfig();
 	public BookingDTO toBookingDTO(Booking booking);
@@ -24,9 +23,7 @@ public interface AdminService {
 	public List<Agency> getAllAgencies();
 	public SystemStatsDTO getSystemStats();
 	public List<City> getAllCities();
-	public City addCity(City city) ;
-	// public void updateUserStatus(Long userId, UserStatus status);
-	// public List<UserDTO> getAllUsers();
+	public City addCity(City city);
 	public void updateUserStatus(long userId, UserStatus status);
 	public List<UserDTO> getAllUsers();
 
