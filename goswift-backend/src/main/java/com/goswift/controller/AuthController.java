@@ -30,10 +30,17 @@ public class AuthController {
     private JwtUtil jwtUtil;
     private CustomerService customerService;
 
-    @PostMapping("/signup")
+       
+     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<UserDTO>> signup(@Valid @RequestBody SignupRequest request) {
         UserDTO user = userService.registerUser(request);
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "User registered", user));
+    }
+
+    // Public endpoint for cities (for home page)
+    @GetMapping("/cities")
+    public ResponseEntity<ApiResponse<List<City>>> getAllCities() {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Cities fetched", customerService.getAllCities()));
     }
 
     @PostMapping("/login")
@@ -46,11 +53,5 @@ public class AuthController {
         
         JwtResponse jwtResponse = new JwtResponse(token, userDTO);
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Login successful", jwtResponse));
-    }
-
-    // Public endpoint for cities (for home page)
-    @GetMapping("/cities")
-    public ResponseEntity<ApiResponse<List<City>>> getAllCities() {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Cities fetched", customerService.getAllCities()));
     }
 }
