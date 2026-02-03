@@ -39,7 +39,7 @@ public class Booking {
         bookingDate = LocalDateTime.now();
     }
 
-    @Column(nullable = false)
+    @Column(nullable=false)
     private LocalDate journeyDate;
 
     @Column(nullable = false)

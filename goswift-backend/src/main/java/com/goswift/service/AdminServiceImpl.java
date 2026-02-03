@@ -46,16 +46,14 @@ public class AdminServiceImpl implements AdminService{
         user.setStatus(status);
         userRepository.save(user);
     }
-
-    
-    @Override
-    public City addCity(City city) {
-        return cityRepository.save(city);
-    }
     
     @Override
     public List<City> getAllCities() { return cityRepository.findAll(); }
 
+    @Override 
+    public City addCity(City city){
+        return cityRepository.save(city);
+    }
     @Override
     public SystemStatsDTO getSystemStats() {
         return SystemStatsDTO.builder()
