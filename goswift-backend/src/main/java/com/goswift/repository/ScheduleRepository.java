@@ -12,12 +12,17 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    
-    @Query("SELECT COUNT(s) > 0 FROM Schedule s WHERE s.bus = :bus AND " +
-           "((s.departureTime < :arrival AND s.arrivalTime > :depart))")
+
     boolean existsOverlappingSchedule(@Param("bus") Bus bus, 
                                       @Param("depart") LocalTime depart, 
                                       @Param("arrival") LocalTime arrival);
+    
+    @Query("SELECT COUNT(s) > 0 FROM Schedule s WHERE s.bus = :bus AND " +
+           "((s.departureTime < :arrival AND s.arrivalTime > :depart))")
+   
+    
+    // Fixed: Declared missing method
+    List<Schedule> findByBus_Agency(Agency agency);
 
     @Query("SELECT s FROM Schedule s " +
            "JOIN s.bus b " +
@@ -30,7 +35,4 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> searchSchedules(@Param("source") String source, 
                                    @Param("dest") String dest,
                                    @Param("busType") BusType busType);
-    
-    // Fixed: Declared missing method
-    List<Schedule> findByBus_Agency(Agency agency);
 }

@@ -32,6 +32,31 @@ public class CustomerController {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Cities fetched", customerService.getAllCities()));
     }
 
+
+    @PostMapping("/book")
+    public ResponseEntity<ApiResponse<Booking>> bookTicket(@RequestBody BookingRequest request) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Booking confirmed", customerService.createBooking(request)));
+    }
+
+
+    // Req 11: Add Feedback
+    @PostMapping("/feedback")
+    public ResponseEntity<ApiResponse<Feedback>> addFeedback(@RequestBody FeedbackRequest request) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Feedback submitted", customerService.addFeedback(request)));
+    }
+
+    // Check if feedback exists for a booking
+    @GetMapping("/booking/{bookingId}/feedback-exists")
+    public ResponseEntity<ApiResponse<Boolean>> checkFeedbackExists(@PathVariable Long bookingId) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Checked feedback status", customerService.hasFeedback(bookingId)));
+    }
+    
+    // Req 26: Available Seats for Selection
+    @GetMapping("/schedule/{scheduleId}/seats")
+    public ResponseEntity<ApiResponse<List<String>>> getBookedSeats(@PathVariable Long scheduleId, @RequestParam LocalDate date) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Fetched occupied seats", customerService.getBookedSeats(scheduleId, date)));
+    }
+
     // Req 14 & 27: Search with Filters and Sorting
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<SearchResultDTO>>> searchBuses(
@@ -45,11 +70,6 @@ public class CustomerController {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Buses found", results));
     }
 
-    @PostMapping("/book")
-    public ResponseEntity<ApiResponse<Booking>> bookTicket(@RequestBody BookingRequest request) {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Booking confirmed", customerService.createBooking(request)));
-    }
-
     // Req 15: Upcoming vs Completed
     @GetMapping("/{userId}/bookings")
     public ResponseEntity<ApiResponse<List<Booking>>> getMyBookings(
@@ -58,21 +78,5 @@ public class CustomerController {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Bookings fetched", customerService.getUserBookings(userId, type)));
     }
 
-    // Req 11: Add Feedback
-    @PostMapping("/feedback")
-    public ResponseEntity<ApiResponse<Feedback>> addFeedback(@RequestBody FeedbackRequest request) {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Feedback submitted", customerService.addFeedback(request)));
-    }
     
-    // Req 26: Available Seats for Selection
-    @GetMapping("/schedule/{scheduleId}/seats")
-    public ResponseEntity<ApiResponse<List<String>>> getBookedSeats(@PathVariable Long scheduleId, @RequestParam LocalDate date) {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Fetched occupied seats", customerService.getBookedSeats(scheduleId, date)));
-    }
-
-    // Check if feedback exists for a booking
-    @GetMapping("/booking/{bookingId}/feedback-exists")
-    public ResponseEntity<ApiResponse<Boolean>> checkFeedbackExists(@PathVariable Long bookingId) {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Checked feedback status", customerService.hasFeedback(bookingId)));
-    }
 }
