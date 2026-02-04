@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserDetailsService ,UserService{
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
-
+ 
         User user = mapper.map(request, User.class);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setStatus(UserStatus.ACTIVE);
@@ -67,8 +69,10 @@ public class UserServiceImpl implements UserDetailsService ,UserService{
             throw new RuntimeException("Account is Blocked");
         }
         return mapper.map(user, UserDTO.class);
+    
     }
 
+ 
     @Override
     public UserDTO updateProfile(Long userId, UserDTO dto) {
         User user = userRepository.findById(userId).orElseThrow();

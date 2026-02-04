@@ -34,7 +34,6 @@ public class AgentServiceImpl implements AgentService  {
                 .capacity(request.getCapacity())
                 .build());
     }
-
     @Override
     public List<Bus> getMyBuses(Long userId) {
         Agency agency = getAgencyByUserId(userId);

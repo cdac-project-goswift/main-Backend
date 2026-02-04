@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface BusRepository extends JpaRepository<Bus, Long> {
     List<Bus> findByAgency(Agency agency);
-    List<Bus> findByAgency_AgencyId(Long agencyId);
     
 }

@@ -27,7 +27,6 @@ public class AgentController {
     private AdminService adminService;
 
     // --- Fleet Management ---
-   
     @PostMapping("/{userId}/buses")
     public ResponseEntity<ApiResponse<Bus>> addBus(@PathVariable Long userId, @Valid @RequestBody BusRequest request) {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Bus added", agentService.addBus(userId, request)));

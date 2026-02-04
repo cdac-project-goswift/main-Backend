@@ -25,6 +25,15 @@ public class Schedule {
     @JoinColumn(name = "dest_city_id", nullable = false)
     private City destCity;
 
+   // Feature: Feedback Categories
+    // granular ratings for specific aspects.
+    /*
+    @Column(name = "cleanliness_rating")
+    private int cleanlinessRating; // 1-5
+
+    @Column(name = "punctuality_rating")
+    private int punctualityRating; // 1-5
+    */
     @Column(nullable = false)
     private LocalTime departureTime;
 

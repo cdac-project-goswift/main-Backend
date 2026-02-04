@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class SystemConfig {
     @Id
-    private Integer configId = 1; // Fixed ID
+    private Integer configId =1;
 
     @Column(name = "service_tax_pct")
     private BigDecimal serviceTaxPct;

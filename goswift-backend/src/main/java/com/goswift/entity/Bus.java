@@ -29,6 +29,6 @@ public class Bus {
     @Column(name = "bus_type", nullable = false)
     private BusType busType;
 
-    @Column(nullable = false)
+    @Column(nullable=false)
     private int capacity;
 }
