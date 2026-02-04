@@ -42,4 +42,6 @@ public class AgentController {
     public ResponseEntity<ApiResponse<Bus>> updateBus(@PathVariable Long busId, @RequestBody BusRequest request) {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Bus updated", agentService.updateBus(busId, request)));
     }
+
+   
 }

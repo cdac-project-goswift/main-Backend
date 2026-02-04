@@ -11,8 +11,10 @@ import com.goswift.entity.Schedule;
 
 public interface AgentService 
 {
-    public Bus addBus(Long userId, BusRequest request) ;
-    public List<Bus> getMyBuses(Long userId) ;
-    public Bus updateBus(Long busId, BusRequest request) ;
+	
+	public Bus updateBus(Long busId, BusRequest request);
+	public List<Bus> getMyBuses(Long userId);
+	public Bus addBus(Long userId, BusRequest request);
+	
 	
 }
