@@ -41,18 +41,29 @@ public class AdminServiceImpl implements AdminService{
     }
     
     @Override
-    public void updateUserStatus(Long userId, UserStatus status) {
-        User user = userRepository.findById(userId).orElseThrow();
-        user.setStatus(status);
-        userRepository.save(user);
-    }
-    
-    @Override
     public List<City> getAllCities() { return cityRepository.findAll(); }
 
     @Override 
     public City addCity(City city){
         return cityRepository.save(city);
+    }
+      
+    @Override
+    public void updateUserStatus(Long userId, UserStatus status) {
+        User user = userRepository.findById(userId).orElseThrow();
+        user.setStatus(status);
+        userRepository.save(user);
+    }
+      @Override
+    public List<Bus> getBusesByAgency(Long agencyId) {
+        return busRepository.findByAgency_AgencyId(agencyId);
+    }
+
+    @Override
+    public List<BookingDTO> getAllBookings() {
+        return bookingRepository.findAll().stream()
+                .map(this::toBookingDTO)
+                .collect(Collectors.toList());
     }
     @Override
     public SystemStatsDTO getSystemStats() {
@@ -63,22 +74,11 @@ public class AdminServiceImpl implements AdminService{
                 .activeAgents(userRepository.countByRole(UserRole.ROLE_AGENT))
                 .build();
     }
+    
 
     @Override
     public List<Agency> getAllAgencies() {
         return agencyRepository.findAll();
-    }
-
-    @Override
-    public List<Bus> getBusesByAgency(Long agencyId) {
-        return busRepository.findByAgency_AgencyId(agencyId);
-    }
-
-    @Override
-    public List<BookingDTO> getAllBookings() {
-        return bookingRepository.findAll().stream()
-                .map(this::toBookingDTO)
-                .collect(Collectors.toList());
     }
 
     @Override

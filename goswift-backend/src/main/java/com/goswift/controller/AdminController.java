@@ -31,22 +31,10 @@ public class AdminController {
     public ResponseEntity<ApiResponse<List<UserDTO>>> getAllUsers() {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Users fetched", adminService.getAllUsers()));
     }
-
-    // @PutMapping("/users/{userId}/status")
-    // public ResponseEntity<ApiResponse<String>> updateUserStatus(@PathVariable Long userId, @RequestParam UserStatus status) {
-    //     adminService.updateUserStatus(userId, status);
-    //     return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "User status updated", null));
-    // }
     @PutMapping("/users/{userId}/Status")
     public ResponseEntity<ApiResponse<String>> updateUserStatus(@PathVariable Long userId, @RequestParam UserStatus status){
         adminService.updateUserStatus(userId,status);
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS","User status updated",null));
-    }
-
-    // Req 10: Add City
-    @PostMapping("/cities")
-    public ResponseEntity<ApiResponse<City>> addCity(@RequestBody City city) {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "City added", adminService.addCity(city)));
     }
     
     
@@ -54,11 +42,23 @@ public class AdminController {
     public ResponseEntity<ApiResponse<List<City>>> getAllCities() {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Cities fetched", adminService.getAllCities()));
     }
+    
+     // Req 10: Add City
+    @PostMapping("/cities")
+    public ResponseEntity<ApiResponse<City>> addCity(@RequestBody City city) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "City added", adminService.addCity(city)));
+    }
 
     // Req 20: System Reports (Separated Users/Agents)
     @GetMapping("/reports")
     public ResponseEntity<ApiResponse<SystemStatsDTO>> getSystemStats() {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Stats fetched", adminService.getSystemStats()));
+    }
+
+    
+    @GetMapping("/agencies/{agencyId}/buses")
+    public ResponseEntity<ApiResponse<List<Bus>>> getBusesByAgency(@PathVariable Long agencyId) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Buses fetched", adminService.getBusesByAgency(agencyId)));
     }
 
     @GetMapping("/bookings")
@@ -70,12 +70,6 @@ public class AdminController {
     public ResponseEntity<ApiResponse<List<Agency>>> getAllAgencies() {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Agencies fetched", adminService.getAllAgencies()));
     }
-
-    @GetMapping("/agencies/{agencyId}/buses")
-    public ResponseEntity<ApiResponse<List<Bus>>> getBusesByAgency(@PathVariable Long agencyId) {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Buses fetched", adminService.getBusesByAgency(agencyId)));
-    }
-
     @GetMapping("/bookings/search")
     public ResponseEntity<ApiResponse<List<BookingDTO>>> searchBookings(
             @RequestParam(required = false) Long agencyId,
