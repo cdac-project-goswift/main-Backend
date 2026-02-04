@@ -18,6 +18,8 @@ public interface AdminService {
 	public SystemConfig getConfig();
 	public BookingDTO toBookingDTO(Booking booking);
 	public List<BookingDTO> searchBookings(Long agencyId, Long busId);
+	public List<Bus> getAllBuses();
+	public List<Bus> getBusesByCity(Long cityId);
 	public List<BookingDTO> getAllBookings();
 	public List<Bus> getBusesByAgency(Long agencyId);
 	public List<Agency> getAllAgencies();
@@ -26,5 +28,4 @@ public interface AdminService {
 	public City addCity(City city);
 	public void updateUserStatus(long userId, UserStatus status);
 	public List<UserDTO> getAllUsers();
-
 }
