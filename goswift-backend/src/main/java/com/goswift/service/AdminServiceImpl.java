@@ -145,4 +145,24 @@ public class AdminServiceImpl implements AdminService{
         config.setBookingFee(req.getBookingFee());
         return configRepository.save(config);
     }
+
+    @Override
+    public com.goswift.dto.UserDTO updateUserStatus(Long userId, com.goswift.enums.UserStatus status) {
+        com.goswift.entity.User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        user.setStatus(status);
+        com.goswift.entity.User updatedUser = userRepository.save(user);
+        
+        // Manual mapping to DTO to avoid modelMapper issues
+        return new com.goswift.dto.UserDTO(
+            updatedUser.getUserId(),
+            updatedUser.getFirstName(),
+            updatedUser.getLastName(),
+            updatedUser.getEmail(),
+            updatedUser.getPhone(),
+            updatedUser.getRole(),
+            updatedUser.getStatus()
+        );
+    }
 }
