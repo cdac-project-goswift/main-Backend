@@ -50,4 +50,11 @@ public class AgentServiceImpl implements AgentService  {
         bus.setCapacity(request.getCapacity());
         return busRepository.save(bus);
     }
+
+    // --- Helper Method ---
+    private com.goswift.entity.Agency getAgencyByUserId(Long userId) {
+        return agencyRepository.findByOwner_UserId(userId)
+                .orElseThrow(() -> new RuntimeException("Agency not found for this user"));
+    }
+    
 }
