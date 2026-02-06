@@ -8,4 +8,5 @@ import java.util.List;
 public interface BusRepository extends JpaRepository<Bus, Long> {
     List<Bus> findByAgency(Agency agency);
     
+    java.util.List<com.goswift.entity.Bus> findByAgency_AgencyId(Long agencyId);
 }
