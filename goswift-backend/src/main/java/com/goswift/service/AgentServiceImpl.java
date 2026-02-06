@@ -25,14 +25,6 @@ public class AgentServiceImpl implements AgentService  {
     private final ModelMapper mapper;
 
     @Override
-    public Agency getAgencyByUserId(Long userId) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        return agencyRepository.findByUser(user)
-            .orElseThrow(() -> new RuntimeException("Agency not found for user"));
-    }
-
-    @Override
     public Bus addBus(Long userId, BusRequest request) {
         Agency agency = getAgencyByUserId(userId);
         return busRepository.save(Bus.builder()
@@ -42,7 +34,6 @@ public class AgentServiceImpl implements AgentService  {
                 .capacity(request.getCapacity())
                 .build());
     }
-
     @Override
     public List<Bus> getMyBuses(Long userId) {
         Agency agency = getAgencyByUserId(userId);
@@ -60,70 +51,10 @@ public class AgentServiceImpl implements AgentService  {
         return busRepository.save(bus);
     }
 
-    @Override
-    public void deleteBus(Long busId) {
-        busRepository.deleteById(busId);
+    // --- Helper Method ---
+    private com.goswift.entity.Agency getAgencyByUserId(Long userId) {
+        return agencyRepository.findByOwner_UserId(userId)
+                .orElseThrow(() -> new RuntimeException("Agency not found for this user"));
     }
-
     
-    @Override
-    public Schedule addSchedule(Long userId, ScheduleRequest request) {
-        Agency agency = getAgencyByUserId(userId);
-        Bus bus = busRepository.findById(request.getBusId())
-            .orElseThrow(() -> new RuntimeException("Bus not found"));
-        
-        if (!bus.getAgency().equals(agency)) throw new RuntimeException("Unauthorized");
-
-        boolean overlap = scheduleRepository.existsOverlappingSchedule(
-            bus, request.getDepartureTime(), request.getArrivalTime()
-        );
-        if (overlap) {
-            throw new RuntimeException("Bus is already scheduled for this time slot");
-        }
-
-        Schedule schedule = mapper.map(request, Schedule.class);
-        schedule.setBus(bus);
-        schedule.setSourceCity(cityRepository.findByCityName(request.getSourceCity()).orElseThrow());
-        schedule.setDestCity(cityRepository.findByCityName(request.getDestCity()).orElseThrow());
-        
-        return scheduleRepository.save(schedule);
-    }
-
-    @Override
-    public List<Schedule> getMySchedules(Long userId) {
-        Agency agency = getAgencyByUserId(userId);
-        return scheduleRepository.findByBus_Agency(agency);
-    }
-
-    @Override
-    public Schedule updateSchedule(Long scheduleId, ScheduleRequest request) {
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-            .orElseThrow(() -> new RuntimeException("Schedule not found"));
-        
-        // Update fields
-        schedule.setDepartureTime(request.getDepartureTime());
-        schedule.setArrivalTime(request.getArrivalTime());
-        schedule.setBaseFare(request.getBaseFare());
-        
-        // Update cities if changed
-        if (!schedule.getSourceCity().getCityName().equals(request.getSourceCity())) {
-            schedule.setSourceCity(cityRepository.findByCityName(request.getSourceCity()).orElseThrow());
-        }
-        if (!schedule.getDestCity().getCityName().equals(request.getDestCity())) {
-            schedule.setDestCity(cityRepository.findByCityName(request.getDestCity()).orElseThrow());
-        }
-        
-        return scheduleRepository.save(schedule);
-    }
-
-    @Override
-    public void deleteSchedule(Long scheduleId) {
-        scheduleRepository.deleteById(scheduleId);
-    }
-
-    @Override
-    public List<Booking> getAgencyBookings(Long userId) {
-        Agency agency = getAgencyByUserId(userId);
-        return bookingRepository.findByAgencyId(agency.getAgencyId());
-    }
 }

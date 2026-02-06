@@ -1,3 +1,4 @@
+
 package com.goswift.dto;
 
 import lombok.Data;
@@ -7,7 +8,7 @@ import java.time.LocalTime;
 @Data
 public class ScheduleRequest {
     private Long busId; // Changed from Integer to Long
-    private String sourceCity;
+    private String sourceCity; //changed from string to long
     private String destCity;
     private LocalTime departureTime;
     private LocalTime arrivalTime;

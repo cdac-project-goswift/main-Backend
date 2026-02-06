@@ -17,21 +17,19 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private UserService userService;
 
-    // Test endpoint to verify JWT authentication
-    @GetMapping("/profile")
-    public ResponseEntity<ApiResponse<String>> getCurrentUserProfile(Authentication auth) {
-        String email = auth.getName();
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Authenticated user", "Welcome " + email));
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse<UserDTO>> getProfile(@PathVariable Long userId) {
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Profile fetched", userService.getUserProfile(userId)));
     }
-
     // Req 23: Profile Update
     @PutMapping("/{userId}")
     public ResponseEntity<ApiResponse<UserDTO>> updateProfile(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Profile updated", userService.updateProfile(userId, userDTO)));
     }
-    
-    @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<UserDTO>> getProfile(@PathVariable Long userId) {
-        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Profile fetched", userService.getUserProfile(userId)));
+     // Test endpoint to verify JWT authentication
+    @GetMapping("/profile")
+    public ResponseEntity<ApiResponse<String>> getCurrentUserProfile(Authentication auth) {
+        String email = auth.getName();
+        return ResponseEntity.ok(new ApiResponse<>("SUCCESS", "Authenticated user", "Welcome " + email));
     }
 }

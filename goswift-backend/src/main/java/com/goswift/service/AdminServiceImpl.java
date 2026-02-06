@@ -41,37 +41,20 @@ public class AdminServiceImpl implements AdminService{
     }
     
     @Override
+    public List<City> getAllCities() { return cityRepository.findAll(); }
+
+    @Override 
+    public City addCity(City city){
+        return cityRepository.save(city);
+    }
+      
+    @Override
     public void updateUserStatus(Long userId, UserStatus status) {
         User user = userRepository.findById(userId).orElseThrow();
         user.setStatus(status);
         userRepository.save(user);
     }
-
-    
-    @Override
-    public City addCity(City city) {
-        return cityRepository.save(city);
-    }
-    
-    @Override
-    public List<City> getAllCities() { return cityRepository.findAll(); }
-
-    @Override
-    public SystemStatsDTO getSystemStats() {
-        return SystemStatsDTO.builder()
-                .totalRevenue(bookingRepository.getTotalRevenue())
-                .totalBookings(bookingRepository.count())
-                .activeBuses(busRepository.count())
-                .activeAgents(userRepository.countByRole(UserRole.ROLE_AGENT))
-                .build();
-    }
-
-    @Override
-    public List<Agency> getAllAgencies() {
-        return agencyRepository.findAll();
-    }
-
-    @Override
+      @Override
     public List<Bus> getBusesByAgency(Long agencyId) {
         return busRepository.findByAgency_AgencyId(agencyId);
     }
@@ -81,6 +64,21 @@ public class AdminServiceImpl implements AdminService{
         return bookingRepository.findAll().stream()
                 .map(this::toBookingDTO)
                 .collect(Collectors.toList());
+    }
+    @Override
+    public SystemStatsDTO getSystemStats() {
+        return SystemStatsDTO.builder()
+                .totalRevenue(bookingRepository.getTotalRevenue())
+                .totalBookings(bookingRepository.count())
+                .activeBuses(busRepository.count())
+                .activeAgents(userRepository.countByRole(UserRole.ROLE_AGENT))
+                .build();
+    }
+    
+
+    @Override
+    public List<Agency> getAllAgencies() {
+        return agencyRepository.findAll();
     }
 
     @Override
@@ -146,5 +144,25 @@ public class AdminServiceImpl implements AdminService{
         config.setServiceTaxPct(req.getServiceTaxPct());
         config.setBookingFee(req.getBookingFee());
         return configRepository.save(config);
+    }
+
+    @Override
+    public com.goswift.dto.UserDTO updateUserStatus(Long userId, com.goswift.enums.UserStatus status) {
+        com.goswift.entity.User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        user.setStatus(status);
+        com.goswift.entity.User updatedUser = userRepository.save(user);
+        
+        // Manual mapping to DTO to avoid modelMapper issues
+        return new com.goswift.dto.UserDTO(
+            updatedUser.getUserId(),
+            updatedUser.getFirstName(),
+            updatedUser.getLastName(),
+            updatedUser.getEmail(),
+            updatedUser.getPhone(),
+            updatedUser.getRole(),
+            updatedUser.getStatus()
+        );
     }
 }
